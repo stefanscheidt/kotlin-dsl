@@ -134,9 +134,53 @@ verticalLayout {
 
 ---
 
+# Extention functions
+
+Instead of this
+
+```kotlin
+fun <T> swap(list: MutableList<T>, index1: Int, index2: Int) {
+    val tmp = list[index1]
+    list[index1] = list[index2]
+    list[index2] = tmp
+}
+val list = mutableListOf(1, 2, 3)
+swap(list, 1, 2)
+```
+
+---
+
+# Extention functions
+
+... we can write this
+
+```kotlin
+fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
+    val tmp = this[index1] // 'this' corresponds to the list
+    this[index1] = this[index2]
+    this[index2] = tmp
+}
+val list = mutableListOf(1, 2, 3)
+list.swap(1,2)
+```
+
+---
+
 # Lambda Expressions with Receivers
 
-Let's assume we have a class
+So what does this do?
+
+```kotlin
+    val printMe: String.() -> Unit = { println(this) }
+
+    "Stefan".printMe()
+```
+
+---
+
+# Lambda Expressions with Receivers
+
+Now let's assume we have a class
 
 ```kotlin
 class HTML {
@@ -162,6 +206,32 @@ fun html(init: HTML.() -> Unit): HTML {
 ... then we can write
 
 ```kotlin
+html({
+    head()
+    body()   
+})
+```
+
+---
+
+# Lambda Expressions with Receivers
+
+We apply syntactic sugger:
+
+```kotlin
+html() {
+    head()
+    body()   
+}
+```
+
+---
+
+# Lambda Expressions with Receivers
+
+And again:
+
+```kotlin
 html {
     head()
     body()   
@@ -172,7 +242,20 @@ html {
 
 # Lambda Expressions with Receivers
 
-OK, let's go on ...
+Now let's go from here
+
+```kotlin
+class HTML {
+    fun head() {}
+    fun body() {}
+}
+```
+
+---
+
+# Lambda Expressions with Receivers
+
+... to here:
 
 ```kotlin
 class HTML {
@@ -193,7 +276,7 @@ class Body { fun p() { } }
 
 # Lambda Expressions with Receivers
 
-Now we can write
+Then we can write
 
 ```kotlin
 html {
@@ -206,13 +289,13 @@ html {
 }
 ```
 
-... and so on.[^5]
-
-[^5]: See <https://kotlinlang.org/docs/reference/type-safe-builders.html> for the complete example
+... and so on.
 
 ---
 
 # Scope control
+
+But ...
 
 ```kotlin
 html {
@@ -221,9 +304,7 @@ html {
             title()
         }
     }
-    body{
-        p()
-    }
+    // ...
 }
 ```
 
@@ -279,11 +360,11 @@ html {
             title()
         }
     }
-    body{
-        p()
-    }
+    // ...
 }
 ```
+
+The whole example could be found here: [Type-Safe builders](https://kotlinlang.org/docs/reference/type-safe-builders.html).
 
 ---
 
