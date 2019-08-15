@@ -216,7 +216,7 @@ html({
 
 # Lambda Expressions with Receivers
 
-We apply syntactic sugger:
+We apply syntactic sugar:
 
 ```kotlin
 html() {
