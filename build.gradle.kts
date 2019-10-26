@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.2.60"
+    kotlin("jvm") version "1.3.50"
 }
 
 group = "com.rewe.digital"
@@ -15,7 +15,7 @@ repositories {
 dependencies {
     compile(kotlin("stdlib-jdk8"))
 
-    compile("org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.11")
+    compile("org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.12")
 }
 
 tasks.withType<KotlinCompile> {

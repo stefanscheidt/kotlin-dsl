@@ -39,7 +39,7 @@ fun html(init: HTML.() -> Unit): HTML {
     return html
 }
 
-fun main(args: Array<String>) {
+fun main() {
     html {
         head {
             this@html.head {

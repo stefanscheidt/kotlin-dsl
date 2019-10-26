@@ -30,7 +30,7 @@ header: #25c5dc, alignment(left), line-height(1), text-scale(1.0), Titillium Web
 
 # Embedded DSLs
 
-> Embedded (or internal) domain-specific languages are implemented as libraries which exploit the syntax of their host general purpose language
+> Embedded (or internal) DSLs are implemented as libraries which exploit the syntax of their host general purpose language
 -- [Wikipedia](https://en.wikipedia.org/wiki/Domain-specific_language#Usage_patterns)
 
 ---
@@ -39,7 +39,7 @@ header: #25c5dc, alignment(left), line-height(1), text-scale(1.0), Titillium Web
 
 # Kotlin DSLs
 
-A domain-specific language embedded in Kotlin
+Domain-specific languages embedded in Kotlin
 
 ---
 
@@ -87,7 +87,7 @@ val obj: JsonObject = jsonObject(
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.2.60"
+    kotlin("jvm") version "1.3.50"
 }
 repositories {
     mavenCentral()
@@ -101,7 +101,7 @@ tasks.withType<KotlinCompile> {
 }
 ```
 
-[^3]: Kotlin Gradle DSL, <https://github.com/gradle/kotlin-dsl>
+[^3]: Kotlin Gradle DSL, <https://docs.gradle.org/current/userguide/kotlin_dsl.html>
 
 ---
 
@@ -180,7 +180,7 @@ So what does this do?
 
 # Lambda Expressions with Receivers
 
-Now let's assume we have a class
+Now let's assume we have a class `HTML`
 
 ```kotlin
 class HTML {
@@ -189,7 +189,20 @@ class HTML {
 }
 ```
 
-and a function
+---
+
+# Lambda Expressions with Receivers
+
+Now let's assume we have a class `HTML`
+
+```kotlin
+class HTML {
+    fun head() {}
+    fun body() {}
+}
+```
+
+and a function `html`
 
 ```kotlin
 fun html(init: HTML.() -> Unit): HTML {
@@ -314,7 +327,7 @@ will also be OK. :-(
 
 # DSL Markers
 
-Control receiver scope with `@DslMarker`:
+Thus let's control receiver scope with `@DslMarker`:
 
 ```kotlin
 @DslMarker

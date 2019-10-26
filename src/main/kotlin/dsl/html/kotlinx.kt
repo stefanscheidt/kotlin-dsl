@@ -4,7 +4,7 @@ import kotlinx.html.*
 import kotlinx.html.stream.appendHTML
 
 
-fun main(args: Array<String>) {
+fun main() {
     System.out.appendHTML().html {
         body {
             div {
