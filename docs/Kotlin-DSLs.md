@@ -2,6 +2,8 @@ theme: Simple, 1
 background-color: #FFFFFF
 text: #777777, alignment(left), line-height(1), text-scale(1.0), Titillium Web
 header: #25c5dc, alignment(left), line-height(1), text-scale(1.0), Titillium Web
+link: #25c5dc, alignment(left), line-height(1), text-scale(1.0), Titillium Web
+autoscale: true
 
 [.header: #000000, alignment(center), line-height(1), text-scale(1.0), Titillium Web]
 ![original, fit](img/REWE-Digital-Titelbild.png)
@@ -377,11 +379,46 @@ html {
 }
 ```
 
+---
+
+# Operator Overloading
+
+We would like to write
+
+```kotlin
+body {
+    p { +"Hello, World!" }
+}
+```
+
+to add a text element to a paragraph.
+
+---
+
+# Operator Overloading
+
+To do this we overload unitary plus:
+
+```kotlin
+abstract class TagWithText(name: String): Tag(name) {
+    operator fun String.unaryPlus() {
+        children.add(TextElement(this))
+    }
+}
+// surrounding stuff left out 
+```
+
+See also [Operator Overloading](https://kotlinlang.org/docs/reference/operator-overloading.html)
+
+---
+
+# The whole thing ...
+
 The whole example could be found here: [Type-Safe builders](https://kotlinlang.org/docs/reference/type-safe-builders.html).
 
 ---
 
-# Invoke
+# More Ingredients: Invoke
 
 With
 
@@ -427,6 +464,8 @@ family {
 
 *   <https://dzone.com/articles/kotlin-dsl-from-theory-to-practice>
     convert Test Data Builder to Kotlin DSL
+*   <https://kotlinexpertise.com/create-dsl-with-kotlin/>
+    create a DSL for setting up a TLS connection
 *   <https://kotlinexpertise.com/java-builders-kotlin-dsls/>
     convert Java builders for Android Material Drawer to Kotlin DSL
 *   <https://blog.codecentric.de/2018/06/kotlin-dsl-apache-kafka/>

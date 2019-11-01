@@ -42,9 +42,7 @@ fun html(init: HTML.() -> Unit): HTML {
 fun main() {
     html {
         head {
-            this@html.head {
-                title()
-            }
+            title()
         }
         body {
             p()
