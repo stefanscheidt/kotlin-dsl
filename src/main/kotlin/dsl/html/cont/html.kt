@@ -7,7 +7,7 @@ annotation class HtmlTagMarker
 interface Element
 
 sealed class Tag(val name: String): Element {
-    val children = arrayListOf<Element>()
+    protected val children = arrayListOf<Element>()
 
     protected fun <T : Element> initTag(tag: T, init: T.() -> Unit): T {
         tag.init()
@@ -15,7 +15,7 @@ sealed class Tag(val name: String): Element {
         return tag
     }
 
-    override fun toString(): String =
+    override fun toString() =
         children.joinToString(
             prefix = "<$name>\n",
             postfix = "</$name>\n",
@@ -30,7 +30,7 @@ abstract class TagWithText(name: String): Tag(name) {
     }
 }
 
-class TextElement(private val text: String): Element {
+class TextElement(val text: String) : Element {
     override fun toString() = "$text\n"
 }
 
@@ -63,14 +63,13 @@ fun html(init: HTML.() -> Unit): HTML {
 }
 
 fun main() {
-    val markup =
-        html {
-            head {
-                title { +"Document Title" }
-            }
-            body {
-                p { +"Hello, World!" }
-            }
+    val document = html {
+        head {
+            title { +"Intro to Kotlin DSLs" }
         }
-    println(markup)
+        body {
+            p { +"Kotlin DSLs are awesome!" }
+        }
+    }
+    println(document)
 }

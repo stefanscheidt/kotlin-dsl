@@ -13,11 +13,22 @@ repositories {
 }
 
 dependencies {
-    compile(kotlin("stdlib-jdk8"))
+    val junitVersion = "5.5.2"
 
+    compile(kotlin("stdlib-jdk8"))
     compile("org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.12")
+
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+
+    testImplementation("org.jetbrains.kotlin:kotlin-test")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
 }
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.named<Test>("test") {
+    useJUnitPlatform()
 }
