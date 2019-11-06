@@ -150,6 +150,56 @@ verticalLayout {
 
 ---
 
+# Example - Spring Web Router Config [^6]
+
+```kotlin
+@Bean
+fun mainRouter(userHandler: UserHandler) = router {
+    accept(TEXT_HTML).nest {
+        GET("/") { ok().render("index") }
+        GET("/sse") { ok().render("sse") }
+        GET("/users", userHandler::findAllView)
+    }
+    "/api".nest {
+        accept(APPLICATION_JSON).nest {
+            GET("/users", userHandler::findAll)
+        }
+        accept(TEXT_EVENT_STREAM).nest {
+            GET("/users", userHandler::stream)
+        }
+    }
+    resources("/**", ClassPathResource("static/"))
+}
+```
+
+[^6]: Spring Framework, [https://docs.spring.io/spring-framework](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/languages.html#kotlin-web)
+
+---
+
+# Example - Spring Mock MVC DSL [^7]
+
+```kotlin
+mockMvc.get("/person/{name}", "Lee") {
+    secure = true
+    accept = APPLICATION_JSON
+    headers {
+        contentLanguage = Locale.FRANCE
+    }
+    principal = Principal { "foo" }
+}.andExpect {
+    status { isOk }
+    content { contentType(APPLICATION_JSON) }
+    jsonPath("$.name") { value("Lee") }
+    content { json("""{"someBoolean": false}""", false) }
+}.andDo {
+    print()
+}
+```
+
+[^7]: Spring Framework, [https://docs.spring.io/spring-framework](https://docs.spring.io/spring-framework/docs/current/spring-framework-reference/languages.html#mockmvc-dsl)
+
+---
+
 [.header: #FFFFFF, alignment(center), line-height(1), text-scale(1.4), Titillium Web]
 ![original, fit](img/Zutaten.png)
 
