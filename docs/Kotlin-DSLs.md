@@ -107,7 +107,30 @@ tasks.withType<KotlinCompile> {
 
 ---
 
-# Examples - Android Layouts [^4]
+# Examples - Dependency Injection for Android [^4]
+
+```kotlin
+fun MainModule(activity: MainActivity) = Module {
+
+    singleton<ButtonMapper> { ButtonMapperImpl(get(ACTIVITY_CONTEXT)) }
+
+    singleton<ButtonRepository> { ButtonRepositoryImpl() }
+
+    singleton<MainView> { activity }
+
+    singleton<MainPresenter> { MainPresenterImpl(get(), get(), get()) }
+
+    singleton<MainInteractor> { MainInteractorImpl(get(), get(), get()) }
+
+    singleton<MainNavigator> { MainNavigatorImpl(get(ACTIVITY)) }
+}
+```
+
+[^4]: Katana, <https://github.com/rewe-digital/katana>
+
+---
+
+# Examples - Android Layouts [^5]
 
 ```kotlin
 verticalLayout {
@@ -123,7 +146,7 @@ verticalLayout {
 }
 ```
 
-[^4]: Kotlin Anko Layouts, <https://github.com/Kotlin/anko/wiki/Anko-Layouts>
+[^5]: Kotlin Anko Layouts, <https://github.com/Kotlin/anko/wiki/Anko-Layouts>
 
 ---
 
