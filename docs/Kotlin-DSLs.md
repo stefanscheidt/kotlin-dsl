@@ -6,11 +6,26 @@ link: #25c5dc, alignment(left), line-height(1), text-scale(1.0), Titillium Web
 autoscale: true
 
 [.header: #000000, alignment(center), line-height(1), text-scale(1.0), Titillium Web]
-![original, fit](img/REWE-Digital-Titelbild.png)
+![original, fit](img/Kotlin-Everywhere-Titelbild.png)
 
-# Domain Specific Languages in Kotlin
-## Theory and Practice
-### Stefan Scheidt, REWE digital
+---
+
+# About me
+
+* Software Engineer at REWE digital in Köln
+* > 20 years of software development in enterprise context
+* Software Crafter
+* Current focus: Microservices with Spring Boot and Java/Kotlin
+* [Twitter](https://twitter.com/stefanscheidt)/[GitHub](https://github.com/stefanscheidt): `stefanscheidt`
+
+---
+
+# Agenda
+
+* Definitions
+* Examples
+* Ingredients
+* Live Coding
 
 ---
 
