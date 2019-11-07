@@ -561,13 +561,26 @@ family {
 
 ---
 
+# Slides
+
+![inline](img/QR-Speakerdeck.png)
+
+## <https://speakerdeck.com/stefanscheidt/kotlin-dsls>
+
+---
+
+# Sources
+
+![inline](img/QR-GitHub.png)
+
+## <https://github.com/stefanscheidt/kotlin-dsl>
+
+---
+
 [.header: #000000, alignment(center), line-height(1), text-scale(1.0), Titillium Web]
 ![original, fit](img/REWE-Digital-Abschlussbild.png)
 
 # Thank you!
 
 ### `@stefanscheidt` on [Twitter](https://twitter.com/stefanscheidt) and [GitHub](https://github.com/stefanscheidt)
-
-### This presentation can be found [here](https://github.com/stefanscheidt/kotlin-dsl)
-
 
