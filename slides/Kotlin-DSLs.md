@@ -215,6 +215,27 @@ mockMvc.get("/person/{name}", "Lee") {
 
 ---
 
+# Example - Rest Template Execution DSL [^8]
+
+```kotlin
+fun create(account: Account) {
+    restTemplate.runCatching {
+        httpPost<String>(createAccountUrl) {
+            body {
+                model(account)
+            }
+        }.execute()
+    }.onFailure {
+        logger.error("Error creating account: ${it.message}", it)
+        throw it
+    }
+}
+```
+
+[^8]: REWE digital codebase
+
+---
+
 [.header: #FFFFFF, alignment(center), line-height(1), text-scale(1.4), Titillium Web]
 ![original, fit](img/Zutaten.png)
 
