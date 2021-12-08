@@ -17,7 +17,7 @@ class Family {
     }
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val myObj = MyClass()
     myObj()
 

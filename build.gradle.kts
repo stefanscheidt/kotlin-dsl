@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.6.0"
+    kotlin("jvm") version "1.5.31"
 }
 
 java {
@@ -15,10 +15,10 @@ repositories {
 }
 
 dependencies {
-    val junitVersion = "5.8.1"
-    val kotestVersion = "4.6.3"
+    val junitVersion = "5.8.2"
+    val kotestVersion = "5.0.1"
 
-    implementation(kotlin("stdlib-jdk8"))
+    implementation("com.lectra:koson:1.1.0")
     implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")

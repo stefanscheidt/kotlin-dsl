@@ -19,12 +19,9 @@ sealed class Tag(private val name: String) : Element {
         children.joinToString(
             prefix = "<$name>\n",
             postfix = "</$name>\n",
-            separator = ""
+            separator = "",
+            transform = Any::toString
         )
-}
-
-class TextElement(private val text: String) : Element {
-    override fun toString() = "$text\n"
 }
 
 abstract class TagWithText(name: String) : Tag(name) {
@@ -33,10 +30,13 @@ abstract class TagWithText(name: String) : Tag(name) {
     }
 }
 
+class TextElement(val text: String) : Element {
+    override fun toString() = "$text\n"
+}
+
 @HtmlTagMarker
 class HTML : Tag("html") {
     fun head(init: Head.() -> Unit) = initTag(Head(), init)
-
     fun body(init: Body.() -> Unit) = initTag(Body(), init)
 }
 
@@ -46,12 +46,12 @@ class Head : Tag("head") {
 }
 
 @HtmlTagMarker
+class Title : TagWithText("title")
+
+@HtmlTagMarker
 class Body : Tag("body") {
     fun p(init: Paragraph.() -> Unit) = initTag(Paragraph(), init)
 }
-
-@HtmlTagMarker
-class Title : TagWithText("title")
 
 @HtmlTagMarker
 class Paragraph : TagWithText("p")

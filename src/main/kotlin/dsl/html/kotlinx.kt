@@ -10,7 +10,7 @@ fun main() {
             div {
                 a("http://kotlinlang.org") {
                     target = ATarget.blank
-                    + "Main site"
+                    +"Main site"
                 }
             }
         }

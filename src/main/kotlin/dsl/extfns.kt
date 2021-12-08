@@ -13,7 +13,7 @@ fun <T> MutableList<T>.swapExt(index1: Int, index2: Int) {
     this[index2] = tmp
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val list = mutableListOf(1, 2, 3)
     swap(list, 1, 2)
     println(list)

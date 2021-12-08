@@ -6,17 +6,8 @@ link: #25c5dc, alignment(left), line-height(1), text-scale(1.0), Titillium Web
 autoscale: true
 
 [.header: #000000, alignment(center), line-height(1), text-scale(1.0), Titillium Web]
-![original, fit](img/Kotlin-Everywhere-Titelbild.png)
 
----
-
-# About me
-
-* Software Engineer at REWE digital in Köln
-* > 20 years of software development in enterprise context
-* Software Crafter
-* Current focus: Microservices with Spring Boot and Java/Kotlin
-* [Twitter](https://twitter.com/stefanscheidt)/[GitHub](https://github.com/stefanscheidt): `stefanscheidt`
+# Kotlin DSLs
 
 ---
 
@@ -82,19 +73,17 @@ System.out.appendHTML().html {
 # Examples - JSON [^2]
 
 ```kotlin
-import com.github.salomonbrys.kotson.*
+import com.lectra.koson.*
 
-val obj: JsonObject = jsonObject(
-    "property" to "value",
-    "array" to jsonArray(
-        21,
-        "fourty-two",
-        jsonObject("go" to "hell")
-    )
-)
+val o = obj {
+    "property" to "value"
+    "array" to arr[1, 2, 3]
+    "null" to null
+    "empty" to obj { }
+}
 ```
 
-[^2]: Kotson, <https://github.com/SalomonBrys/Kotson>
+[^2]: Koson, <https://github.com/lectra-tech/koson>
 
 ---
 
@@ -104,17 +93,17 @@ val obj: JsonObject = jsonObject(
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.50"
+    kotlin("jvm") version "1.6.0"
+}
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "11"
 }
 repositories {
     mavenCentral()
 }
 dependencies {
-    compile(kotlin("stdlib-jdk8"))
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    implementation("com.lectra:koson:1.1.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
 }
 ```
 
@@ -122,46 +111,11 @@ tasks.withType<KotlinCompile> {
 
 ---
 
-# Examples - Dependency Injection for Android [^4]
-
-```kotlin
-fun MainModule(activity: MainActivity) = Module {
-
-    singleton<ButtonMapper> { ButtonMapperImpl(get(ACTIVITY_CONTEXT)) }
-
-    singleton<ButtonRepository> { ButtonRepositoryImpl() }
-
-    singleton<MainView> { activity }
-
-    singleton<MainPresenter> { MainPresenterImpl(get(), get(), get()) }
-
-    singleton<MainInteractor> { MainInteractorImpl(get(), get(), get()) }
-
-    singleton<MainNavigator> { MainNavigatorImpl(get(ACTIVITY)) }
-}
-```
-
-[^4]: Katana, <https://github.com/rewe-digital/katana>
-
----
-
 # Examples - Android Layouts [^5]
 
-```kotlin
-verticalLayout {
-  val name = editText {
-    hint = "Name"
-    textSize = 24f
-  }
-  button("Say Hello") {
-    onClick { 
-      toast("Hello, ${name.text}!")
-    }
-  }
-}
-```
+![inline](img/Jetpack-Compose.png)
 
-[^5]: Kotlin Anko Layouts, <https://github.com/Kotlin/anko/wiki/Anko-Layouts>
+[^5]: Jetpack Compose, <https://developer.android.com/jetpack/compose>
 
 ---
 
@@ -272,8 +226,28 @@ fun <T> MutableList<T>.swap(index1: Int, index2: Int) {
     this[index2] = tmp
 }
 val list = mutableListOf(1, 2, 3)
-list.swap(1,2)
+list.swap(1, 2)
 ```
+
+---
+
+# Function Type with receivers[^9]
+
+The type of an extention function
+
+```kotlin
+        fun A.f(b: B): C {
+    // ...
+}
+```
+
+is
+
+```kotlin
+        A.(B) -> C
+```
+
+[^9]: [Function literals with receivers](https://kotlinlang.org/docs/lambdas.html#function-literals-with-receiver)
 
 ---
 
@@ -284,7 +258,7 @@ So what does this do?
 ```kotlin
     val printMe: String.() -> Unit = { println(this) }
 
-    "Stefan".printMe()
+"Stefan".printMe()
 ```
 
 ---
@@ -300,20 +274,13 @@ class HTML {
 }
 ```
 
+...
+
 ---
 
 # Lambda Expressions with Receivers
 
-Now let's assume we have a class `HTML`
-
-```kotlin
-class HTML {
-    fun head() {}
-    fun body() {}
-}
-```
-
-and a function `html`
+... and a function `html`
 
 ```kotlin
 fun html(init: HTML.() -> Unit): HTML {
@@ -331,8 +298,21 @@ fun html(init: HTML.() -> Unit): HTML {
 
 ```kotlin
 html({
+    this.head()
+    this.body()
+})
+```
+
+---
+
+# Lambda Expressions with Receivers
+
+`this` can be omitted:
+
+```kotlin
+html({
     head()
-    body()   
+    body()
 })
 ```
 
@@ -358,9 +338,11 @@ And again:
 ```kotlin
 html {
     head()
-    body()   
+    body()
 }
 ```
+
+Bingo!
 
 ---
 
@@ -432,13 +414,13 @@ html {
 }
 ```
 
-will also be OK. :-(
+would also be OK. :-(
 
 ---
 
-# DSL Markers
+# DSL Markers for the rescue!
 
-Thus let's control receiver scope with `@DslMarker`:
+Let's control receiver scope with `@DslMarker`:
 
 ```kotlin
 @DslMarker
@@ -461,7 +443,28 @@ class Body { // ...
 
 # DSL Markers
 
-Now we will get
+If we now try
+
+```kotlin
+30 html {
+    31 head {
+        32 head {
+            33 title ()
+            34
+        }
+        35
+    }
+    // ...
+}
+```
+
+...
+
+---
+
+# DSL Markers
+
+... we will get
 
 ```
 $ ./gradlew compileKotlin 
@@ -488,42 +491,14 @@ html {
 }
 ```
 
----
-
-# Operator Overloading
-
-We would like to write
-
-```kotlin
-body {
-    p { +"Hello, World!" }
-}
-```
-
-to add a text element to a paragraph.
-
----
-
-# Operator Overloading
-
-To do this we overload unitary plus:
-
-```kotlin
-abstract class TagWithText(name: String): Tag(name) {
-    operator fun String.unaryPlus() {
-        children.add(TextElement(this))
-    }
-}
-// surrounding stuff left out 
-```
-
-See also [Operator Overloading](https://kotlinlang.org/docs/reference/operator-overloading.html)
+... but who would do this?
 
 ---
 
 # The whole thing ...
 
-The whole example could be found here: [Type-Safe builders](https://kotlinlang.org/docs/reference/type-safe-builders.html).
+... could be found
+here: [Type-Safe builders](https://kotlinlang.org/docs/reference/type-safe-builders.html).
 
 ---
 
@@ -569,16 +544,23 @@ family {
 
 ---
 
+# More Ingredients
+
+* [Operator Overloading](https://kotlinlang.org/docs/operator-overloading.html)
+* [Infix Functions](https://kotlinlang.org/docs/functions.html#infix-notation)
+
+---
+
 # More Examples for DSLs
 
-*   <https://dzone.com/articles/kotlin-dsl-from-theory-to-practice>
-    convert Test Data Builder to Kotlin DSL
-*   <https://kotlinexpertise.com/create-dsl-with-kotlin/>
-    create a DSL for setting up a TLS connection
-*   <https://kotlinexpertise.com/java-builders-kotlin-dsls/>
-    convert Java builders for Android Material Drawer to Kotlin DSL
-*   <https://blog.codecentric.de/2018/06/kotlin-dsl-apache-kafka/>
-    A simple example of Kotlin DSL for Apache Kafka producer and consumer (German)
+* <https://dzone.com/articles/kotlin-dsl-from-theory-to-practice>
+  convert Test Data Builder to Kotlin DSL
+* <https://kotlinexpertise.com/create-dsl-with-kotlin/>
+  create a DSL for setting up a TLS connection
+* <https://kotlinexpertise.com/java-builders-kotlin-dsls/>
+  convert Java builders for Android Material Drawer to Kotlin DSL
+* <https://blog.codecentric.de/2018/06/kotlin-dsl-apache-kafka/>
+  A simple example of Kotlin DSL for Apache Kafka producer and consumer (German)
 
 ---
 
@@ -599,7 +581,6 @@ family {
 ---
 
 [.header: #000000, alignment(center), line-height(1), text-scale(1.0), Titillium Web]
-![original, fit](img/REWE-Digital-Abschlussbild.png)
 
 # Thank you!
 
